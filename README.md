@@ -1,5 +1,4 @@
-# short1.github.io
-The Performance Planning Value Chain (PPVC, 2004) is a conceptual framework developed to align performance measurement and management practices with strategic business objectives. It was introduced in the early 2000s, primarily through academic and consulting work in operations and supply chain performance, including by scholars like Bititci et al. (2004) and related works on performance management systems (PMS).
+Performance Planning Value Chain (PPVC, 2004) is a conceptual framework developed to align performance measurement and management practices with strategic business objectives. It was introduced in the early 2000s, primarily through academic and consulting work in operations and supply chain performance, including by scholars like Bititci et al. (2004) and related works on performance management systems (PMS).
 
 Core Idea of PPVC
 
