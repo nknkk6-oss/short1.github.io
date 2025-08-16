@@ -1,0 +1,161 @@
+This figure shows three possible zone configurations in an AS/RS (Automated Storage and Retrieval System) rack with three product storage classes — A-class, B-class, and C-class — arranged according to their picking frequency.
+
+Key Elements Blue square = I/O point (input/output station where items enter or leave the rack).
+
+S/R machine = stacker crane or shuttle that moves vertically and horizontally to retrieve/store loads.
+
+A-class items = highest demand, stored closest to I/O point to minimize travel time.
+
+B-class items = medium demand, stored further away than A-class but closer than C-class.
+
+C-class items = lowest demand, stored farthest from I/O point.
+
+Configurations Shown
+
+L-shape configuration
+
+A-class: bottom-left corner, near I/O point (shortest travel).
+
+B-class: above and to the right of A-class.
+
+C-class: farthest zone (upper and right section).
+
+Shape of high-demand zone is L-shaped along bottom and left side of rack.
+
+Advantage: minimizes travel distance for single-command cycles.
+
+Band1 configuration
+
+Zones arranged horizontally in bands:
+
+A-class in the lower horizontal band, directly in front of I/O point.
+
+B-class just above A-class.
+
+C-class occupies upper levels.
+
+Advantage: works well when vertical movement is costly or when picking mostly from a similar height.
+
+Band2 configuration
+
+Zones arranged diagonally from I/O point:
+
+A-class nearest diagonal region from I/O point.
+
+B-class extends diagonally upward/right.
+
+C-class fills opposite far side.
+
+Advantage: suits multi-command cycles where simultaneous vertical and horizontal travel can be balanced.
+
+Practical Use
+
+Choose L-shape: For single-command cycles (store or retrieve one load at a time).
+
+Choose Band1: When horizontal travel is less costly and picks are concentrated in a height range.
+
+Choose Band2: When multi-command cycles dominate and average picks per cycle are high.
+
+We can add the travel-time reasoning behind why each layout is optimal for different cycle types so that it connects to S/R machine performance curves.
+
+why each zone layout (L‑shape, Band1, Band2) is preferred for different command cycles, with the travel‑time reasoning, simple formulas, and a decision matrix you can use in design/analysis.
+
+Quick definitions (so we’re using the same terms)
+
+I/O point — blue square; coordinate origin (0,0).
+
+S/R machine — stacker crane that must move horizontally (x) and vertically (y).
+
+Single‑command cycle — one storage or one retrieval command per crane trip.
+
+Dual‑command cycle — crane performs two commands in the same cycle (e.g., retrieve one, store another) before returning.
+
+Multi‑command cycle — crane performs several commands in one cycle (k ≥ 2 picks/stores per trip; often via buffering or multi‑load shuttles).
+
+Assumptions (typical, make yours explicit if different):
+
+Horizontal travel speed = v_x. Vertical travel speed = v_y.
+
+Time to perform a pick/store (handling) = t_h.
+
+Distance measured as Manhattan (crane moves in x then y) or as separable components if independent.
+
+Represent a slot by coordinates (x,y) where both are normalized to rack size [0,1].
+
+Basic travel‑time model (per command)
+
+For a single command to slot (x,y) from I/O at (0,0), approximate travel time:
+
+T_{single}(x,y) = x/v_x} + y/{v_y} + t_h
+
+(If crane can travel diagonally the formula changes but relative comparisons remain similar if speed components differ.)
+
+For a dual command serving two slots (x_1,y_1) and (x_2,y_2) in one trip (sequence chosen to minimize travel):
+
+T_dual approx min order x_a/v_x+y_a/v_y}+t_h +( |x_b-x_a|)/v_x+(|y_b-y_a|)/v_y+t_h
+
+where a,b are indices 1 and 2 in either order.
+
+For a multi‑command cycle with k slots, total cycle time is sum of leg times between successive slots plus k handling times. Average time per command ≈ total/ k. Important metric: average time per command (lower is better).
+
+Why each layout is preferred — intuitive travel reasoning
+
+1) L‑shape — best for single‑command cycles
+
+L places the high‑frequency A items hugging the I/O along both bottom and left (i.e., small x and/or small y).
+
+Result: for typical A items, both x and y are small → T_{single} minimal.
+
+When most cycles are single commands, optimization focuses on minimizing individual trips from I/O to slot and back → cluster near origin (L shape) is optimal.
+
+2) Band1 (horizontal bands) — good when vertical movement is expensive or picks concentrate by level
+
+A and B are organized in horizontal bands (similar y across many A/B slots).
+
+If vertical movement is slower or expensive (v_y <<v_x), reducing vertical component reduces travel time.
+
+Dual commands that service multiple slots on the same band have small horizontal legs between them; vertical cost paid once per cycle.
+
+Good for dual‑command cycles when many picks/stores happen at similar heights.
+
+3) Band2 (diagonal / stair‑stepped) — best for multi‑command cycles with many picks per trip
+
+The diagonal/stair shape increases opportunity to serve multiple A/B picks in one continuous path with small incremental x & y between adjacent slots.
+
+When k (avg picks per cycle) is large, the relevant metric is average time per command:
+
+T = [(total travel (all legs)+kt_h]/
+
+k
+
+A diagonal packing reduces inter‑slot distances |x_{i+1}-x_i| + |y_i+1}-y_i|, lowering  T.
+
+So if crane routinely does multi‑pick tours, Band2 (or stair/diagonal) reduces per‑item travel more than the L which clusters items but makes multi‑pick routes less efficient.
+
+Simple comparative example (symbolic)
+
+Compare two A‑slots: one at (0.05,0.05) (L shape) and two A‑slots at (0.05,0.05) and (0.15,0.15) (diagonal neighbor).
+
+Single command to (0.05,0.05): T = 0.05/v_x + 0.05/v_y + t_h — tiny.
+
+Dual command visiting both in one trip (order matters):
+
+Path origin → (0.05,0.05) → (0.15,0.15) → back (if required) yields small inter‑slot travel 0.1/v_x+0.1/v_y.
+
+L shape minimizes single command but may force larger jumps when combining picks that are spread horizontally; diagonal reduces the inter‑slot jumps for multi‑pick runs.
+
+(You can plug your actual v_x, v_y, t_h and slot coordinates to compute numeric totals.)
+
+If most trips are single-command cycles (only one storage or retrieval per trip), and your goal is to minimize the travel time for each individual return trip, choose the L-shape layout.
+
+If you have many dual-command cycles (two actions per trip), and your slots can be paired at similar heights to reduce vertical travel, choose the Band1 layout with horizontal bands.
+
+If you run multi-command cycles with a high average number of picks per crane trip, and you need to minimize the distance between consecutive picks, choose the Band2 layout with diagonal or stair-shaped zones.
+
+Extra heuristics:
+
+If vertical travel is >2× cost of horizontal, bias to Band1 (minimize vertical moves).
+
+If average picks per cycle ≥ 3 and picks are well correlated spatially, use Band2.
+
+If you have many single urgent picks (e.g., e‑commerce), default to L‑shape.
